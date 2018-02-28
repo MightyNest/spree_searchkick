@@ -1,12 +1,14 @@
 Spree::Product.class_eval do
-  searchkick word_start: [:name, :brand, :name_and_brand, :description], callbacks: false
+  searchkick word_start: [:name, :brand, :name_and_brand],
+    callbacks: false,
+    synonyms: -> { ENV["SEARCHKICK_SYNONYMS_FILE"].blank? ? [] : CSV.read(Rails.root + ENV["SEARCHKICK_SYNONYMS_FILE"]) }
 
   def search_data
-
     json = {
       id: id,
       name: name,
-      description: description,
+      description: "#{name} #{brand.try(:name)} #{description} #{meta_keywords} #{meta_description} #{product_properties.map(&:value).join(' ')}",
+      keywords: "#{meta_keywords} #{product_properties.map(&:value).join(' ')}",
       active: available?,
       created_at: created_at,
       updated_at: updated_at,
