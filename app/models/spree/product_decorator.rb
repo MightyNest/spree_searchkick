@@ -29,11 +29,11 @@ Spree::Product.class_eval do
     end
 
     Spree::Property.all.each do |prop|
-      json.merge!(Hash[prop.name.downcase, property(prop.name)])
+      json.merge!(Hash[prop.filter_name, property(prop.name)])
     end
 
     Spree::Taxonomy.all.each do |taxonomy|
-      json.merge!(Hash["#{taxonomy.name.downcase}_ids", taxon_by_taxonomy(taxonomy.id).map(&:id)])
+      json.merge!(Hash[taxonomy.filter_name.downcase, taxon_by_taxonomy(taxonomy.id).map(&:id)])
     end
 
     json
