@@ -21,6 +21,9 @@ Spree::Product.class_eval do
       subscribable: subscribable,
       list_position: index_list_position
     }
+    self.classifications.each do |classification|
+      json[classification.taxon.sort_key.to_sym] = classification.position
+    end
 
     if brand
       json.merge!(brand: brand.name, name_and_brand: [brand.name, name].join(" "))

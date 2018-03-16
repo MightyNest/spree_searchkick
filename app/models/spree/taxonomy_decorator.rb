@@ -4,4 +4,5 @@ Spree::Taxonomy.class_eval do
   def filter_name
     "#{name.downcase.gsub(/\s+/, '')}_ids"
   end
+
 end
