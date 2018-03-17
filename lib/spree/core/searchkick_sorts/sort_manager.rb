@@ -25,7 +25,7 @@ module Spree
 
         def taxon_sort
           sort = {}
-          sort[@taxon.sort_key.to_sym] = :asc
+          sort[@taxon.sort_key.to_sym] = { order: :asc, unmapped_type: 'long' }
 
           { sort: [sort, { list_position: :asc }], label: 'Featured' }
         end
