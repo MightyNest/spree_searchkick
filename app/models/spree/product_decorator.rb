@@ -9,7 +9,7 @@ Spree::Product.class_eval do
       name: name,
       description: "#{name} #{brand.try(:name)} #{description} #{meta_keywords} #{meta_description} #{product_properties.map(&:value).join(' ')}",
       keywords: "#{meta_keywords} #{product_properties.map(&:value).join(' ')}",
-      active: available?,
+      active: active?,
       created_at: created_at,
       updated_at: updated_at,
       price: price,
@@ -52,6 +52,10 @@ Spree::Product.class_eval do
 
   def taxon_by_taxonomy(taxonomy_id)
     taxons.joins(:taxonomy).where(spree_taxonomies: { id: taxonomy_id })
+  end
+
+  def active?
+    available? && (!self.respond_to?(:individual_sale) || individual_sale)
   end
 
   def self.autocomplete(keywords)
