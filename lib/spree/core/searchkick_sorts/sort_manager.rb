@@ -34,8 +34,10 @@ module Spree
         def find_sort(sort_key)
           if @taxon && sort_key == 'featured'
             taxon_sort
-          else
+          elsif sort_key.is_a?(String)
             SearchkickSorts::applicable_sorts[sort_key]
+          else
+            sort_key
           end
         end
 
