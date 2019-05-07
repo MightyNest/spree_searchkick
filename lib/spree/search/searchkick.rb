@@ -72,11 +72,12 @@ module Spree::Search
     end
 
     def search_includes
-      [:brand, master: [:prices, :images]]
+      @search_includes
     end
 
     def prepare(params)
       super
+      @search_includes = params[:search_includes] || [master: [:images, :prices]]
       @sort = Spree::Core::SearchkickSorts.process_sorts(params, taxon)
     end
 
