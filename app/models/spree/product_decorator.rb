@@ -19,7 +19,8 @@ Spree::Product.class_eval do
       taxon_names: taxon_and_ancestors.map(&:name),
       orders_count: orders.where('completed_at > ?', 3.months.ago).count,
       subscribable: subscribable,
-      list_position: index_list_position
+      list_position: index_list_position,
+      member_special: on_member_special?
     }
     self.classifications.each do |classification|
       json[classification.taxon.sort_key.to_sym] = classification.position

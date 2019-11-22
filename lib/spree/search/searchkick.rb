@@ -40,12 +40,12 @@ module Spree::Search
     def aggregations
       fs = {}
       Spree::Taxonomy.filterable.each do |taxonomy|
-        fs[taxonomy.filter_name.to_sym] = { stats: true }
+        fs[taxonomy.filter_name.to_sym] = {}
       end
       Spree::Property.filterable.each do |property|
-        fs[property.filter_name.to_sym] = { stats: true }
+        fs[property.filter_name.to_sym] = {}
       end
-      fs[:brand] = { stats: true }
+      fs[:brand] = {}
       fs[:price] = { ranges: [
         {to: 15},
         {to: 25},
