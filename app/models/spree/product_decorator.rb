@@ -20,7 +20,8 @@ Spree::Product.class_eval do
       orders_count: orders.where('completed_at > ?', 3.months.ago).count,
       subscribable: subscribable,
       list_position: index_list_position,
-      member_special: member_special?
+      member_special: member_special?,
+      ingredient_ids: ingredient_ids
     }
     self.classifications.each do |classification|
       json[classification.taxon.sort_key.to_sym] = classification.position
