@@ -6,10 +6,11 @@ module Spree::Search
 
     def get_base_elasticsearch
       curr_page = page || 1
+      # binding.pry
       Spree::Product.search(keyword_query,
         where: where_query,
         aggs: aggregations,
-        fields: ["name_and_brand^5", "name^4", "brand^2", "keywords^2", "description"],
+        fields: ["name_and_brand^5", "name^4", "brand^2", "keywords^2", "description", "ingredient_ids"],
         match: :word,
         includes: search_includes,
         smart_aggs: true,
@@ -54,6 +55,7 @@ module Spree::Search
         {to: 100},
         {from: 100}]
       }
+      fs[:ingredient_ids] = {}
 
       fs
     end
