@@ -12,7 +12,7 @@ module Spree
         end
 
         es_filters << self.process_filter('brand', :brand, aggregations['brand'])
-        es_filters << self.process_filter('ingredients', :ingredient_groups, aggregations['ingredient_groups'])
+        es_filters << self.process_filter('ingredient_groups', :ingredient_groups, aggregations['ingredient_groups'])
 
         if aggregations.has_key? 'price'
           es_filters << self.process_filter('price', :price, aggregations['price'])
