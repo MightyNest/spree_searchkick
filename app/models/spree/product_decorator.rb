@@ -21,7 +21,7 @@ Spree::Product.class_eval do
       subscribable: subscribable,
       list_position: index_list_position,
       member_special: member_special?,
-      ingredients: ingredient_group_names
+      ingredient_groups: ingredient_groups
     }
     self.classifications.each do |classification|
       json[classification.taxon.sort_key.to_sym] = classification.position
