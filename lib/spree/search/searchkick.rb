@@ -54,7 +54,7 @@ module Spree::Search
         {to: 100},
         {from: 100}]
       }
-      fs[:ingredient_groups] = {}
+      fs[:ingredients] = {}
 
       fs
     end
