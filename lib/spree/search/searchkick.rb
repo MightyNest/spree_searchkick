@@ -71,7 +71,7 @@ module Spree::Search
         elsif name == 'ingredient_groups'
           Rails.logger.error "*** ingredient_groups found. name: #{name}, scope_attribute: #{scope_attribute}"
           Rails.logger.error "*** scope_attribute.class: #{scope_attribute.class}"
-          ingredient_group_names << scope_attribute
+          ingredient_group_names = scope_attribute
         else
           query.merge!(Hash[name, scope_attribute])
         end
