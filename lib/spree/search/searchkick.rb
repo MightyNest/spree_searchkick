@@ -74,15 +74,32 @@ module Spree::Search
           Rails.logger.error "*** ingredient_groups found. name: #{name}, scope_attribute: #{scope_attribute}"
           Rails.logger.error "*** scope_attribute.class: #{scope_attribute.class}"
           ingredient_group_names = scope_attribute
-          scope_attribute.each do |group_name|
-            query.merge!(Hash[name, group_name])
-          end
         else
           query.merge!(Hash[name, scope_attribute])
         end
       end
 
       if ingredient_group_names.any?
+        bool_hash = {
+          bool: {
+            must: [
+              {
+                term: {
+                  ingredient_groups: "Preservative Free"
+                }
+              },
+              {
+                term: {
+                  ingredient_groups: "Fragrance Free"
+                }
+              }
+            ]
+          }
+        }
+        Rails.logger.error "*** bool_hash: #{bool_hash}"
+
+        query.merge!(bool_hash)
+
         # ingredient_group_array = []
 
         # ingredient_group_names.each do |name|
