@@ -69,22 +69,31 @@ module Spree::Search
           price_filter = process_price(scope_attribute)
           query.merge!(price: price_filter)
         elsif name == 'ingredient_groups'
-          puts "*** ingredient_groups found. name: #{name}, scope_attribute: #{scope_attribute}"
           Rails.logger.error "*** ingredient_groups found. name: #{name}, scope_attribute: #{scope_attribute}"
+          Rails.logger.error "*** scope_attribute.class: #{scope_attribute.class}"
           ingredient_group_names << scope_attribute
         else
           query.merge!(Hash[name, scope_attribute])
         end
       end
 
+      Rails.logger.error "*** query before merge: #{query}"
+
       if ingredient_group_names.any?
+        ingredient_group_array = []
+
+        ingredient_group_names.each do |name|
+          ingredient_group_array << { ingredient_groups: name }
+        end
+        Rails.logger.error "*** ingredient_group_array: #{ingredient_group_array}"
+
+        # '_and' => ingredient_group_names.map { |name| Hash['ingredient_groups', name] }
         query.merge!(
-          '_and' => ingredient_group_names.map { |name| Hash['ingredient_groups', name] }
+          '_and' => ingredient_group_array
         )
       end
 
-      puts "*** query: #{query}"
-      Rails.logger.error "*** query: #{query}"
+      Rails.logger.error "*** query after merge: #{query}"
 
       query
     end
