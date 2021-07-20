@@ -61,14 +61,31 @@ module Spree::Search
 
     def add_search_filters(query)
       return query unless search
+
+      ingredient_group_names = []
+
       search.each do |name, scope_attribute|
         if name == 'price'
           price_filter = process_price(scope_attribute)
           query.merge!(price: price_filter)
+        elsif name == 'ingredient_groups'
+          puts "*** ingredient_groups found. name: #{name}, scope_attribute: #{scope_attribute}"
+          Rails.logger.error "*** ingredient_groups found. name: #{name}, scope_attribute: #{scope_attribute}"
+          ingredient_group_names << scope_attribute
         else
           query.merge!(Hash[name, scope_attribute])
         end
       end
+
+      if ingredient_group_names.any?
+        query.merge!(
+          '_and' => ingredient_group_names.map { |name| Hash['ingredient_groups', name] }
+        )
+      end
+
+      puts "*** query: #{query}"
+      Rails.logger.error "*** query: #{query}"
+
       query
     end
 
