@@ -80,25 +80,33 @@ module Spree::Search
       end
 
       if ingredient_group_names.any?
-        bool_hash = {
-          bool: {
-            must: [
-              {
-                term: {
-                  ingredient_groups: "Preservative Free"
-                }
-              },
-              {
-                term: {
-                  ingredient_groups: "Fragrance Free"
-                }
-              }
-            ]
-          }
+        and_hash = {
+          _and: [{ingredient_groups: "Preservative Free"}, {ingredient_groups: "Fragrance Free"}]
         }
-        Rails.logger.error "*** bool_hash: #{bool_hash}"
 
-        query.merge!(bool_hash)
+        Rails.logger.error "*** and_hash: #{and_hash}"
+
+        query.merge!(and_hash)
+
+        # bool_hash = {
+        #   bool: {
+        #     must: [
+        #       {
+        #         term: {
+        #           ingredient_groups: "Preservative Free"
+        #         }
+        #       },
+        #       {
+        #         term: {
+        #           ingredient_groups: "Fragrance Free"
+        #         }
+        #       }
+        #     ]
+        #   }
+        # }
+        # Rails.logger.error "*** bool_hash: #{bool_hash}"
+
+        # query.merge!(bool_hash)
 
         # ingredient_group_array = []
 
