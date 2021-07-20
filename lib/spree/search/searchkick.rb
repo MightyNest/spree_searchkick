@@ -61,14 +61,43 @@ module Spree::Search
 
     def add_search_filters(query)
       return query unless search
+
+      ingredient_group_names = []
+
       search.each do |name, scope_attribute|
+        Rails.logger.error "*** query before merge: #{query}"
+
         if name == 'price'
           price_filter = process_price(scope_attribute)
           query.merge!(price: price_filter)
+        elsif name == 'ingredient_groups'
+          ingredient_group_names = scope_attribute
         else
           query.merge!(Hash[name, scope_attribute])
         end
       end
+
+      if ingredient_group_names.any?
+        ingredient_group_array = []
+        ingredient_group_names.each do |group_name|
+          ingredient_group_array << { ingredient_groups: group_name }
+        end
+
+        # To merge in ingredient_groups using AND instead of OR, the resulting hash needs to look
+        # like the following:
+        # and_hash = {
+        #   _and: [{ingredient_groups: "Preservative Free"}, {ingredient_groups: "Fragrance Free"}]
+        # }
+        and_hash = {
+          _and: ingredient_group_array
+        }
+        Rails.logger.error "*** and_hash: #{and_hash}"
+
+        query.merge!(and_hash)
+      end
+
+      Rails.logger.error "*** Elasticsearch query after merging filters: #{query}"
+
       query
     end
 
