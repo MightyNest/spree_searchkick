@@ -80,8 +80,16 @@ module Spree::Search
       end
 
       if ingredient_group_names.any?
+        ingredient_group_array = []
+        ingredient_group_names.each do |group_name|
+          ingredient_group_array << { ingredient_groups: group_name }
+        end
+
+        # and_hash = {
+        #   _and: [{ingredient_groups: "Preservative Free"}, {ingredient_groups: "Fragrance Free"}]
+        # }
         and_hash = {
-          _and: [{ingredient_groups: "Preservative Free"}, {ingredient_groups: "Fragrance Free"}]
+          _and: ingredient_group_array
         }
 
         Rails.logger.error "*** and_hash: #{and_hash}"
