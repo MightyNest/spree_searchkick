@@ -12,6 +12,8 @@ module Spree
         end
 
         es_filters << self.process_filter('brand', :brand, aggregations['brand'])
+        es_filters << self.process_filter('ingredient_groups', :ingredient_groups, aggregations['ingredient_groups'])
+
         if aggregations.has_key? 'price'
           es_filters << self.process_filter('price', :price, aggregations['price'])
         end
@@ -53,6 +55,12 @@ module Spree
             t = filter_val["key"]
             count = filter_val["doc_count"]
             options << {label: t, value: t, count: count }
+          end
+        when :property, :ingredient_groups
+          filter["buckets"].each do |filter_val|
+            ingredient_group = filter_val["key"]
+            count = filter_val["doc_count"]
+            options << {label: ingredient_group, value: ingredient_group, count: count }
           end
         end
 
